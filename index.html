@@ -9,10 +9,23 @@
 		<title>Matthew Chen's Website</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
+
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
 	<body>
+	<header>
+		<a href="#" id="logo"></a>
+		<nav>
+		<a href="#" id="menu-icon"></a>
+			<ul>
+				<li><a href="#" class="current smooth-scroll">Home</a></li>
+				<li><a href="#amazon" class="smooth-scroll">Experience</a></li>
+				<li><a href="#courses" class="smooth-scroll">Courses</a></li>
+				<li><a href="#contact" class="smooth-scroll">Contact</a></li>
+			</ul>
+		</nav>
+	</header>
+
 		<!-- Sidebar -->
 		<!--<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
 		  <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
@@ -29,13 +42,13 @@
 			    document.getElementById("mySidebar").style.display = "none";
 			}
 		</script>-->
-		<div class="header" id="myHeader">
+		<!--<div class="header" id="myHeader">
 		  <a href="#start" class="button special wide small smooth-scroll-middle">Home </a>
-		  <!--<a href="#amazon" class="button wide small smooth-scroll-middle">Experience </a>-->
+		  <a href="#amazon" class="button wide small smooth-scroll-middle">Experience </a>
 		  <a href="#courses" class="button special wide small smooth-scroll-middle">Classes </a>
-		  <!--<a href="#projects" class="button wide small smooth-scroll-middle">Projects </a>-->
+		  <a href="#projects" class="button wide small smooth-scroll-middle">Projects </a>
 		  <a href="#contact" class="button special wide small smooth-scroll-middle">Contact </a>
-		</div>
+		</div>-->
 		<!-- Wrapper -->
 			<div id="wrapper" class="divided">
 
@@ -70,16 +83,12 @@
 
 				<!-- CourseWork -->
 					<section class="wrapper style1 align-center">
-						<div class="inner">
-							<header id="courses">
-								<h2>Coursework</h2>
-							</header>
+						<div class="inner" id = "courses">
+							<h2>Coursework</h2>
 							<div class="content">
 								<div class="table-wrapper">
 									<div class="index align-left">
-										<header>
-											<h3>Upper Level Courses</h3>
-										</header>
+										<h3>Upper Level Courses</h3>
 									</div>
 									<table>
 										<tbody>
@@ -91,9 +100,7 @@
 										</tbody>
 									</table>
 									<div class="index align-left">
-										<header>
-											<h3>Core Computer Science Courses</h3>
-										</header>
+										<h3>Core Computer Science Courses</h3>
 									</div>
 									<table>
 										<tbody>
@@ -120,9 +127,7 @@
 										</tbody>
 									</table>
 									<div class="index align-left">
-										<header>
-											<h3>Math Courses</h3>
-										</header>
+										<h3>Math Courses</h3>
 									</div>
 									<table>
 										<tbody>
@@ -149,9 +154,7 @@
 										</tbody>
 									</table>
 									<div class="index align-left">
-										<header>
-											<h3>Engineering/Entrepreneurship Courses</h3>
-										</header>
+										<h3>Engineering/Entrepreneurship Courses</h3>
 									</div>
 									<table>
 										<tbody>
@@ -482,7 +485,7 @@
 								<li><a href="https://www.linkedin.com/in/thematthewchen" class="icon style2 fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
 								<!--<li><a href="#" class="icon style2 fa-envelope"><span class="label" target="_blank">Email</span></a></li>-->
 							</ul>
-							<p>&copy; Matthew Chen. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+							<p>&copy; Matthew Chen. Design: HTML5 UP.</p>
 						</div>
 					</footer>
 
