@@ -8514,10 +8514,10 @@ a:hover#menu-icon {
 		padding: 20px;
 		background: #fff;
 		border: 5px solid #444;
-		right: 20px;
+		left: 20px;
 		top: 60px;
 		width: 50%;
-		border-radius: 4px 0 4px 4px;
+		border-radius: 0px 8px 8px 8px;
 
 	}
 
