@@ -8458,7 +8458,7 @@ header {
 	position: fixed;
 	top: 0;
 	left: 0;
-	border-bottom: 4px solid #636363;
+	border-bottom: 2px solid #636363;
 	z-index: 100;
 
 }
@@ -8472,7 +8472,6 @@ li {
 
 nav {
 
-	float: right;
 	padding: 20px;	
 
 }
