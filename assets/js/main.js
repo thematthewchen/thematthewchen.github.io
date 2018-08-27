@@ -1,375 +1,258 @@
 /*
-	Story by HTML5 UP
+	Massively by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
 (function($) {
 
-	skel.breakpoints({
-		xlarge: '(max-width: 1680px)',
-		large: '(max-width: 1280px)',
-		medium: '(max-width: 980px)',
-		small: '(max-width: 736px)',
-		xsmall: '(max-width: 480px)',
-		xxsmall: '(max-width: 360px)'
-	});
+	var	$window = $(window),
+		$body = $('body'),
+		$wrapper = $('#wrapper'),
+		$header = $('#header'),
+		$nav = $('#nav'),
+		$main = $('#main'),
+		$navPanelToggle, $navPanel, $navPanelInner;
 
-	$(function() {
+	// Breakpoints.
+		breakpoints({
+			default:   ['1681px',   null       ],
+			xlarge:    ['1281px',   '1680px'   ],
+			large:     ['981px',    '1280px'   ],
+			medium:    ['737px',    '980px'    ],
+			small:     ['481px',    '736px'    ],
+			xsmall:    ['361px',    '480px'    ],
+			xxsmall:   [null,       '360px'    ]
+		});
 
-		// When the user scrolls the page, execute myFunction 
-		window.onscroll = function() {myFunction()};
+	/**
+	 * Applies parallax scrolling to an element's background image.
+	 * @return {jQuery} jQuery object.
+	 */
+	$.fn._parallax = function(intensity) {
 
-		// Get the header
-		var header = document.getElementById("myHeader");
-
-		// Get the offset position of the navbar
-		var sticky = header.offsetTop;
-
-		// Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-		function myFunction() {
-		  if (window.pageYOffset >= sticky) {
-		    header.classList.add("sticky");
-		  } else {
-		    header.classList.remove("sticky");
-		  }
-		}
-		
 		var	$window = $(window),
-			$body = $('body'),
-			$wrapper = $('#wrapper');
+			$this = $(this);
 
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
+		if (this.length == 0 || intensity === 0)
+			return $this;
 
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
+		if (this.length > 1) {
 
-		// Fix: Placeholder polyfill.
-			$('form').placeholder();
+			for (var i=0; i < this.length; i++)
+				$(this[i])._parallax(intensity);
 
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
+			return $this;
 
-		// Browser fixes.
+		}
 
-			// IE: Flexbox min-height bug.
-				if (skel.vars.browser == 'ie')
-					(function() {
+		if (!intensity)
+			intensity = 0.25;
 
-						var flexboxFixTimeoutId;
+		$this.each(function() {
 
-						$window.on('resize.flexbox-fix', function() {
+			var $t = $(this),
+				$bg = $('<div class="bg"></div>').appendTo($t),
+				on, off;
 
-							var $x = $('.fullscreen');
+			on = function() {
 
-							clearTimeout(flexboxFixTimeoutId);
+				$bg
+					.removeClass('fixed')
+					.css('transform', 'matrix(1,0,0,1,0,0)');
 
-							flexboxFixTimeoutId = setTimeout(function() {
+				$window
+					.on('scroll._parallax', function() {
 
-								if ($x.prop('scrollHeight') > $window.height())
-									$x.css('height', 'auto');
-								else
-									$x.css('height', '100vh');
+						var pos = parseInt($window.scrollTop()) - parseInt($t.position().top);
 
-							}, 250);
-
-						}).triggerHandler('resize.flexbox-fix');
-
-					})();
-
-			// Object fit workaround.
-				if (!skel.canUse('object-fit'))
-					(function() {
-
-						$('.banner .image, .spotlight .image').each(function() {
-
-							var $this = $(this),
-								$img = $this.children('img'),
-								positionClass = $this.parent().attr('class').match(/image-position-([a-z]+)/);
-
-							// Set image.
-								$this
-									.css('background-image', 'url("' + $img.attr('src') + '")')
-									.css('background-repeat', 'no-repeat')
-									.css('background-size', 'cover');
-
-							// Set position.
-								switch (positionClass.length > 1 ? positionClass[1] : '') {
-
-									case 'left':
-										$this.css('background-position', 'left');
-										break;
-
-									case 'right':
-										$this.css('background-position', 'right');
-										break;
-
-									default:
-									case 'center':
-										$this.css('background-position', 'center');
-										break;
-
-								}
-
-							// Hide original.
-								$img.css('opacity', '0');
-
-						});
-
-					})();
-
-		// Smooth scroll.
-			$('.smooth-scroll').scrolly();
-			$('.smooth-scroll-middle').scrolly({ anchor: 'middle' });
-
-		// Wrapper.
-			$wrapper.children()
-				.scrollex({
-					top:		'30vh',
-					bottom:		'30vh',
-					initialize:	function() {
-						$(this).addClass('is-inactive');
-					},
-					terminate:	function() {
-						$(this).removeClass('is-inactive');
-					},
-					enter:		function() {
-						$(this).removeClass('is-inactive');
-					},
-					leave:		function() {
-
-						var $this = $(this);
-
-						if ($this.hasClass('onscroll-bidirectional'))
-							$this.addClass('is-inactive');
-
-					}
-				});
-
-		// Items.
-			$('.items')
-				.scrollex({
-					top:		'30vh',
-					bottom:		'30vh',
-					delay:		50,
-					initialize:	function() {
-						$(this).addClass('is-inactive');
-					},
-					terminate:	function() {
-						$(this).removeClass('is-inactive');
-					},
-					enter:		function() {
-						$(this).removeClass('is-inactive');
-					},
-					leave:		function() {
-
-						var $this = $(this);
-
-						if ($this.hasClass('onscroll-bidirectional'))
-							$this.addClass('is-inactive');
-
-					}
-				})
-				.children()
-					.wrapInner('<div class="inner"></div>');
-
-		// Gallery.
-			$('.gallery')
-				.wrapInner('<div class="inner"></div>')
-				.prepend(skel.vars.mobile ? '' : '<div class="forward"></div><div class="backward"></div>')
-				.scrollex({
-					top:		'30vh',
-					bottom:		'30vh',
-					delay:		50,
-					initialize:	function() {
-						$(this).addClass('is-inactive');
-					},
-					terminate:	function() {
-						$(this).removeClass('is-inactive');
-					},
-					enter:		function() {
-						$(this).removeClass('is-inactive');
-					},
-					leave:		function() {
-
-						var $this = $(this);
-
-						if ($this.hasClass('onscroll-bidirectional'))
-							$this.addClass('is-inactive');
-
-					}
-				})
-				.children('.inner')
-					//.css('overflow', 'hidden')
-					.css('overflow-y', skel.vars.mobile ? 'visible' : 'hidden')
-					.css('overflow-x', skel.vars.mobile ? 'scroll' : 'hidden')
-					.scrollLeft(0);
-
-			// Style #1.
-				// ...
-
-			// Style #2.
-				$('.gallery')
-					.on('wheel', '.inner', function(event) {
-
-						var	$this = $(this),
-							delta = (event.originalEvent.deltaX * 10);
-
-						// Cap delta.
-							if (delta > 0)
-								delta = Math.min(25, delta);
-							else if (delta < 0)
-								delta = Math.max(-25, delta);
-
-						// Scroll.
-							$this.scrollLeft( $this.scrollLeft() + delta );
-
-					})
-					.on('mouseenter', '.forward, .backward', function(event) {
-
-						var $this = $(this),
-							$inner = $this.siblings('.inner'),
-							direction = ($this.hasClass('forward') ? 1 : -1);
-
-						// Clear move interval.
-							clearInterval(this._gallery_moveIntervalId);
-
-						// Start interval.
-							this._gallery_moveIntervalId = setInterval(function() {
-								$inner.scrollLeft( $inner.scrollLeft() + (5 * direction) );
-							}, 10);
-
-					})
-					.on('mouseleave', '.forward, .backward', function(event) {
-
-						// Clear move interval.
-							clearInterval(this._gallery_moveIntervalId);
+						$bg.css('transform', 'matrix(1,0,0,1,0,' + (pos * intensity) + ')');
 
 					});
 
-			// Lightbox.
-				$('.gallery.lightbox')
-					.on('click', 'a', function(event) {
+			};
 
-						var $a = $(this),
-							$gallery = $a.parents('.gallery'),
-							$modal = $gallery.children('.modal'),
-							$modalImg = $modal.find('img'),
-							href = $a.attr('href');
+			off = function() {
 
-						// Not an image? Bail.
-							if (!href.match(/\.(jpg|gif|png|mp4)$/))
-								return;
+				$bg
+					.addClass('fixed')
+					.css('transform', 'none');
 
-						// Prevent default.
-							event.preventDefault();
-							event.stopPropagation();
+				$window
+					.off('scroll._parallax');
 
-						// Locked? Bail.
-							if ($modal[0]._locked)
-								return;
+			};
 
-						// Lock.
-							$modal[0]._locked = true;
+			// Disable parallax on ..
+				if (browser.name == 'ie'			// IE
+				||	browser.name == 'edge'			// Edge
+				||	window.devicePixelRatio > 1		// Retina/HiDPI (= poor performance)
+				||	browser.mobile)					// Mobile devices
+					off();
 
-						// Set src.
-							$modalImg.attr('src', href);
+			// Enable everywhere else.
+				else {
 
-						// Set visible.
-							$modal.addClass('visible');
+					breakpoints.on('>large', on);
+					breakpoints.on('<=large', off);
 
-						// Focus.
-							$modal.focus();
+				}
 
-						// Delay.
-							setTimeout(function() {
+		});
 
-								// Unlock.
-									$modal[0]._locked = false;
+		$window
+			.off('load._parallax resize._parallax')
+			.on('load._parallax resize._parallax', function() {
+				$window.trigger('scroll');
+			});
 
-							}, 600);
+		return $(this);
 
-					})
-					.on('click', '.modal', function(event) {
+	};
 
-						var $modal = $(this),
-							$modalImg = $modal.find('img');
+	// Play initial animations on page load.
+		$window.on('load', function() {
+			window.setTimeout(function() {
+				$body.removeClass('is-preload');
+			}, 100);
+		});
 
-						// Locked? Bail.
-							if ($modal[0]._locked)
-								return;
+	// Scrolly.
+		$('.scrolly').scrolly();
 
-						// Already hidden? Bail.
-							if (!$modal.hasClass('visible'))
-								return;
+	// Background.
+		$wrapper._parallax(0.925);
 
-						// Lock.
-							$modal[0]._locked = true;
+	// Nav Panel.
 
-						// Clear visible, loaded.
-							$modal
-								.removeClass('loaded')
+		// Toggle.
+			$navPanelToggle = $(
+				'<a href="#navPanel" id="navPanelToggle">Menu</a>'
+			)
+				.appendTo($wrapper);
 
-						// Delay.
-							setTimeout(function() {
+			// Change toggle styling once we've scrolled past the header.
+				$header.scrollex({
+					bottom: '5vh',
+					enter: function() {
+						$navPanelToggle.removeClass('alt');
+					},
+					leave: function() {
+						$navPanelToggle.addClass('alt');
+					}
+				});
 
-								$modal
-									.removeClass('visible')
+		// Panel.
+			$navPanel = $(
+				'<div id="navPanel">' +
+					'<nav>' +
+					'</nav>' +
+					'<a href="#navPanel" class="close"></a>' +
+				'</div>'
+			)
+				.appendTo($body)
+				.panel({
+					delay: 500,
+					hideOnClick: true,
+					hideOnSwipe: true,
+					resetScroll: true,
+					resetForms: true,
+					side: 'right',
+					target: $body,
+					visibleClass: 'is-navPanel-visible'
+				});
 
-								setTimeout(function() {
+			// Get inner.
+				$navPanelInner = $navPanel.children('nav');
 
-									// Clear src.
-										$modalImg.attr('src', '');
+			// Move nav content on breakpoint change.
+				var $navContent = $nav.children();
 
-									// Unlock.
-										$modal[0]._locked = false;
+				breakpoints.on('>medium', function() {
 
-									// Focus.
-										$body.focus();
+					// NavPanel -> Nav.
+						$navContent.appendTo($nav);
 
-								}, 475);
+					// Flip icon classes.
+						$nav.find('.icons, .icon')
+							.removeClass('alt');
 
-							}, 125);
+				});
 
-					})
-					.on('keypress', '.modal', function(event) {
+				breakpoints.on('<=medium', function() {
 
-						var $modal = $(this);
+					// Nav -> NavPanel.
+						$navContent.appendTo($navPanelInner);
 
-						// Escape? Hide modal.
-							if (event.keyCode == 27)
-								$modal.trigger('click');
+					// Flip icon classes.
+						$navPanelInner.find('.icons, .icon')
+							.addClass('alt');
 
-					})
-					.prepend('<div class="modal" tabIndex="-1"><div class="inner"><img src="" /></div></div>')
-						.find('img')
-							.on('load', function(event) {
+				});
 
-								var $modalImg = $(this),
-									$modal = $modalImg.parents('.modal');
+			// Hack: Disable transitions on WP.
+				if (browser.os == 'wp'
+				&&	browser.osVersion < 10)
+					$navPanel
+						.css('transition', 'none');
 
-								setTimeout(function() {
+	// Intro.
+		var $intro = $('#intro');
 
-									// No longer visible? Bail.
-										if (!$modal.hasClass('visible'))
-											return;
+		if ($intro.length > 0) {
 
-									// Set loaded.
-										$modal.addClass('loaded');
+			// Hack: Fix flex min-height on IE.
+				if (browser.name == 'ie') {
+					$window.on('resize.ie-intro-fix', function() {
 
-								}, 275);
+						var h = $intro.height();
 
-							});
+						if (h > $window.height())
+							$intro.css('height', 'auto');
+						else
+							$intro.css('height', h);
 
-	});
+					}).trigger('resize.ie-intro-fix');
+				}
+
+			// Hide intro on scroll (> small).
+				breakpoints.on('>small', function() {
+
+					$main.unscrollex();
+
+					$main.scrollex({
+						mode: 'bottom',
+						top: '25vh',
+						bottom: '-50vh',
+						enter: function() {
+							$intro.addClass('hidden');
+						},
+						leave: function() {
+							$intro.removeClass('hidden');
+						}
+					});
+
+				});
+
+			// Hide intro on scroll (<= small).
+				breakpoints.on('<=small', function() {
+
+					$main.unscrollex();
+
+					$main.scrollex({
+						mode: 'middle',
+						top: '15vh',
+						bottom: '-15vh',
+						enter: function() {
+							$intro.addClass('hidden');
+						},
+						leave: function() {
+							$intro.removeClass('hidden');
+						}
+					});
+
+			});
+
+		}
 
 })(jQuery);
